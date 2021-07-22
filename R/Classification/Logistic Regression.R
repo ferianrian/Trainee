@@ -1,14 +1,14 @@
-# Random Forest
+# Logistic Regression
 # Load The dataset
 data("Titanic")
 dataset <- as.data.frame(Titanic)
 
-
 library(dplyr)
-#checking account
+#Recode factor
 dataset$Survived <- recode_factor(dataset$Survived,
                                                "Yes"="1",
                                                "No"="0")
+
 # Delete Freq col
 dataset <- dataset[-5]
 
@@ -32,4 +32,3 @@ y_pred = ifelse(prob_pred > 0.6, 1, 0)
 # Confusion Matrix
 library(caret)
 confusionMatrix(as.factor(y_pred), test_set$Survived)
-
