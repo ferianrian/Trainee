@@ -1,4 +1,4 @@
-# KNN (Need all become numeric)
+# SVM
 # Load The dataset
 data("iris")
 dataset <- as.data.frame(iris)
@@ -11,13 +11,16 @@ split = sample.split(dataset$Species, SplitRatio = 0.8)
 training_set = subset(dataset, split == TRUE)
 test_set = subset(dataset, split == FALSE)
 
-# Fitting K-NN to the Training set and Predicting the Test set results
-library(class)
-y_pred = knn(train = training_set[, -5],
-             test = test_set[, -5],
-             cl = training_set[, 5],
-             k = 3,
-             prob = TRUE)
+# Fitting SVM to the Training set
+# install.packages('e1071')
+library(e1071)
+classifier = svm(formula = Species ~ .,
+                 data = training_set,
+                 type = 'C-classification',
+                 kernel = 'linear')
+
+# Predicting the Test set results
+y_pred = predict(classifier, newdata = test_set[-5])
 
 # Making the Confusion Matrix
 cm = table(test_set[, 5], y_pred)
@@ -26,3 +29,4 @@ cm
 # Confusion Matrix
 library(caret)
 confusionMatrix(as.factor(y_pred), test_set$Species)
+
